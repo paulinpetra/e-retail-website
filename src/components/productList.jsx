@@ -6,6 +6,7 @@ import { productsFetch } from "@/app/api/productsFetch";
 const ProductList = () => {
   // State for the fetched products
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
