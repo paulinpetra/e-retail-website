@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, updateCartQuantity } from "@/redux/ProductsSlice";
+import { removeFromCart, updateCartQuantity } from "@/redux/cartSlice";
 
 const Cart = () => {
-  const { cartProducts } = useSelector((state) => state.products);
+  const { cartProducts } = useSelector((state) => state.cartProducts);
   const dispatch = useDispatch();
 
   const [form, setForm] = useState({

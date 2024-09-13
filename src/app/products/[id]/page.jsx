@@ -3,12 +3,8 @@
 import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateCartQuantity,
-  setQuantity,
-  addToCart,
-  fetchProducts,
-} from "@/redux/ProductsSlice";
+import { fetchProducts } from "@/redux/productsSlice";
+import { updateCartQuantity, setQuantity, addToCart } from "@/redux/cartSlice";
 
 export default function IndividualProductPage() {
   const params = useParams();

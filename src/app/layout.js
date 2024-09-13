@@ -1,5 +1,5 @@
 import "./globals.css";
-import AllProductsFetcher from "@/redux/reduxAllProductsFetcher";
+import AllProductsFetcher from "@/redux/reduxProductsFetcher";
 import ReduxProviders from "@/redux/reduxProviders";
 
 export const metadata = {
