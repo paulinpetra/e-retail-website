@@ -1,29 +1,29 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import ProductCard from "./product-collection/productCard";
-import { productsFetch } from "@/app/api/productsFetch";
+import React, { useEffect } from "react";
+import ProductCard from "./productCard";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchProducts, addToCart } from "@/redux/ProductsSlice";
 
 const ProductList = () => {
-  // State for the fetched products
-  const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
+  const dispatch = useDispatch();
+  const { products, status, error } = useSelector((state) => state.products);
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const fetchedProducts = await productsFetch();
-        setProducts(fetchedProducts);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
-    getData();
-  }, []);
-
-  const addToCart = (product) => {
-    setCart([...cart, product]);
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({ id: product.id, quantity: 1 }));
   };
+
+  if (status === "loading") {
+    return <h1>Loading...</h1>;
+  }
+
+  if (status === "failed") {
+    return <h1>Error: {error}</h1>;
+  }
 
   return (
     <div className="bg-white py-12 px-4 sm:px-8 lg:px-16">
@@ -35,7 +35,7 @@ const ProductList = () => {
           <ProductCard
             key={product.id}
             product={product}
-            addToCart={addToCart}
+            addToCart={() => handleAddToCart(product)}
           />
         ))}
       </div>

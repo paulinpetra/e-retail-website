@@ -1,48 +1,62 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  updateCartQuantity,
+  setQuantity,
+  addToCart,
+  fetchProducts,
+} from "@/redux/ProductsSlice";
 
-export default function ProductPage() {
+export default function IndividualProductPage() {
   const params = useParams();
   const productId = params.id;
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const [product, setProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const { product, status, error, quantity } = useSelector(
+    (state) => state.products
+  );
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(
-          `https://fakestoreapi.com/products/${productId}`
-        );
-        const productData = await response.json();
-        setProduct(productData);
-      } catch (error) {
-        console.error("Product fetch failed");
-      }
-    };
-    fetchProduct();
-  }, [productId]);
+    dispatch(fetchProducts(productId));
+  }, [dispatch, productId]);
 
   const handleNavigation = () => {
     router.back();
   };
 
-  if (!product) {
+  // Handle loading and error states
+  if (status === "loading") {
     return <h1>Loading...</h1>;
+  }
+
+  if (status === "failed") {
+    return <h1>Error: {error}</h1>;
+  }
+
+  // Render product details only when product is available
+  if (!product) {
+    return <h1>No product found</h1>;
   }
 
   return (
     <div className="flex flex-col md:flex-row w-full text-black p-10 items-center">
       {/* Product details */}
-      <div className="flex justify-center min-w-[300px] mr- w-[340px] px-4 mb-8 md:mb-0x">
-        <img
-          className="w-full object-cover"
-          src={product.image}
-          alt={product.title}
-        />
+      <div className="flex justify-center min-w-[300px] mr- w-[340px] px-4 mb-8 md:mb-0">
+        {product.image ? (
+          <img
+            className="w-full object-cover"
+            src={product.image}
+            alt={product.title}
+          />
+        ) : (
+          <div className="w-full bg-gray-200 flex items-center justify-center">
+            <span>No image available</span>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col bg-white p-4">
@@ -65,7 +79,11 @@ export default function ProductPage() {
           <div className="flex py-2 items-center font-bold text-gray-500 border border-gray-300 rounded-lg">
             <button
               className="h-full px-4 hover:bg-gray-100 focus:outline-none"
-              onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
+              onClick={() =>
+                dispatch(
+                  updateCartQuantity({ id: productId, quantity: quantity - 1 })
+                )
+              }
             >
               -
             </button>
@@ -73,11 +91,15 @@ export default function ProductPage() {
               className="w-9 text-center bg-transparent border-0 focus:ring-transparent focus:outline-none"
               type="numeric"
               value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
+              onChange={(e) => dispatch(setQuantity(Number(e.target.value)))}
             />
             <button
               className="h-full px-4 hover:bg-gray-100 focus:outline-none"
-              onClick={() => setQuantity(quantity + 1)}
+              onClick={() =>
+                dispatch(
+                  updateCartQuantity({ id: productId, quantity: quantity + 1 })
+                )
+              }
             >
               +
             </button>
@@ -86,7 +108,7 @@ export default function ProductPage() {
           {/* Add to cart button */}
           <button
             className="w-full md:w-auto bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-            onClick={() => console.log("Add to cart clicked")}
+            onClick={() => dispatch(addToCart({ id: productId, quantity }))}
           >
             Add to cart
           </button>

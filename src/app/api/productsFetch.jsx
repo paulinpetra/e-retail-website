@@ -1,4 +1,4 @@
-//The function that handles the API call for all products
+//The function that handles the API server-side logic for fetching all products
 export const productsFetch = async () => {
   try {
     const response = await fetch("https://fakestoreapi.com/products");
