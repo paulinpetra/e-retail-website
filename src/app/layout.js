@@ -1,4 +1,5 @@
 import "./globals.css";
+import NavBar from "@/components/navBar";
 import AllProductsFetcher from "@/redux/reduxProductsFetcher";
 import ReduxProviders from "@/redux/reduxProviders";
 
@@ -13,6 +14,7 @@ export default function RootLayout({ children }) {
       <body>
         <ReduxProviders>
           <AllProductsFetcher /> {/* fetch all products on project mount */}
+          <NavBar />
           {children}
         </ReduxProviders>
       </body>

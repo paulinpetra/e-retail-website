@@ -12,7 +12,7 @@ export const fetchProducts = createAsyncThunk(
 const productsSlice = createSlice({
   name: "products",
   initialState: {
-    products: [], //array for multiple products
+    items: [], //array for multiple products
     status: "idle", //Status to track loading state ('idle', 'loading', 'succeeded', 'failed')
     error: null, // Stores any error messages if a request fails
   },
@@ -27,7 +27,7 @@ const productsSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.products = action.payload;
+        state.items = action.payload;
         state.status = "succeeded";
       })
       .addCase(fetchProducts.rejected, (state, action) => {

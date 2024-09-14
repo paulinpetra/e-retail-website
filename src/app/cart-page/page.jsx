@@ -1,185 +1,48 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, updateCartQuantity } from "@/redux/cartSlice";
+"use client";
 
-const Cart = () => {
-  const { cartProducts } = useSelector((state) => state.cartProducts);
-  const dispatch = useDispatch();
+import CartItem from "@/components/cartItem";
+import { useSelector } from "react-redux";
+import { FaArrowRight } from "react-icons/fa";
 
-  const [form, setForm] = useState({
-    fullName: "",
-    address: "",
-    city: "",
-    postalCode: "",
-    country: "",
-    paymentMethod: "credit-card",
-  });
+const CartPage = () => {
+  const { cartItems, orderTotal } = useSelector((state) => state.cart);
 
-  //function for calculating total price
-  const totalCost = cartProducts.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  if (cartItems.length <= 0) {
+    return (
+      <div className="font-bold text-lg grid place-content-center align-middle h-full">
+        Your cart is empty!
+      </div>
+    );
+  }
 
-  //functions for the form
-  const handleInputChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    alert("Order placed successfully!");
-  };
-
-  // TODO: add a message for if cart is empty (cartProducts.length == 0)
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Checkout</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left section: Cart overview */}
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
-          <div className="bg-white shadow rounded-lg p-4">
-            {cartProducts.map((item) => (
-              <div key={item.id} className="flex justify-between mb-4">
-                <span>
-                  {item.quantity} x {item.title}
-                </span>
-                <span>${item.quantity * item.price}</span>
-
-                <button
-                  onClick={() => dispatch(removeFromCart(item.id))}
-                  className="flex bg-transparent border-none text-xl hover:cursor-pointer"
-                >
-                  <RxCross2 />
-                </button>
-                <button
-                  onClick={() => dispatch(updateCartQuantity(item.id))}
-                  className="flex bg-transparent border-none text-xl hover:cursor-pointer"
-                ></button>
-              </div>
-            ))}
-            <div className="flex justify-between font-bold text-lg">
-              <span>Total:</span>
-              <span>${totalCost}</span>
-            </div>
-          </div>
+      <div className="flex flex-col md:flex-row justify-between gap-8">
+        <div className="w-full md:w-[65%] flex flex-col gap-4">
+          <h2 className="font-bold text-3xl mb-4">Your Cart:</h2>
+          {cartItems.map((product) => (
+            <CartItem
+              key={product.cartID}
+              img={product.imgSrc}
+              imgAlt={product.imgAlt}
+              title={product.title}
+              price={product.price}
+              cartID={product.cartID}
+              amount={product.amount}
+            />
+          ))}
         </div>
-
-        {/* Right section: Shipping information form */}
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white shadow rounded-lg p-6"
-          >
-            <div className="mb-4">
-              <label htmlFor="fullName" className="block text-gray-700">
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="fullName"
-                name="fullName"
-                value={form.fullName}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded mt-1"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="address" className="block text-gray-700">
-                Address
-              </label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={form.address}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded mt-1"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="mb-4">
-                <label htmlFor="city" className="block text-gray-700">
-                  City
-                </label>
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={form.city}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded mt-1"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="postalCode" className="block text-gray-700">
-                  Postal Code
-                </label>
-                <input
-                  type="text"
-                  id="postalCode"
-                  name="postalCode"
-                  value={form.postalCode}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded mt-1"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="country" className="block text-gray-700">
-                Country
-              </label>
-              <input
-                type="text"
-                id="country"
-                name="country"
-                value={form.country}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded mt-1"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="paymentMethod" className="block text-gray-700">
-                Payment Method
-              </label>
-              <select
-                id="paymentMethod"
-                name="paymentMethod"
-                value={form.paymentMethod}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded mt-1"
-                required
-              >
-                <option value="credit-card">Credit Card</option>
-                <option value="paypal">PayPal</option>
-                <option value="swish">Swish</option>
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500"
-            >
-              Place Order
-            </button>
-          </form>
+        <div className="w-full md:w-[35%] flex flex-col gap-6">
+          <div className="h-16 w-full flex items-center justify-center border border-slate-300 bg-white text-lg font-semibold rounded-lg">
+            Cart Total: ${orderTotal.toFixed(2)}
+          </div>
+          <button className="h-16 w-full bg-cyan-800 hover:bg-cyan-500 active:bg-cyan-400 text-white rounded-lg shadow-lg flex justify-center items-center gap-4 hover:scale-105 ease-in-out duration-200">
+            Click to checkout <FaArrowRight />
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Cart;
+export default CartPage;

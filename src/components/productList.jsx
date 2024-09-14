@@ -4,18 +4,18 @@ import ProductCard from "./productCard";
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchProducts } from "@/redux/productsSlice";
-import { addToCart } from "@/redux/cartSlice";
+import { addItem } from "@/redux/cartSlice";
 
 const ProductList = () => {
   const dispatch = useDispatch();
-  const { products, status, error } = useSelector((state) => state.products);
+  const { items, status, error } = useSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
   const handleAddToCart = (product) => {
-    dispatch(addToCart({ id: product.id, quantity: 1 }));
+    dispatch(addItem({ id: product.id, quantity: 1 }));
   };
 
   if (status === "loading") {
@@ -32,7 +32,7 @@ const ProductList = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Mapping over products and rendering a ProductCard for each */}
-        {products.map((product) => (
+        {items.map((product) => (
           <ProductCard
             key={product.id}
             product={product}

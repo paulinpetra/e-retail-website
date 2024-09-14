@@ -1,5 +1,4 @@
 // Presentational Component for individual product cards
-import React from "react";
 import Link from "next/link";
 
 const ProductCard = ({ product }) => {
