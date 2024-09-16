@@ -15,6 +15,7 @@ const defaultState = {
 const getCartFromLocalStorage = () => {
   if (typeof window !== "undefined") {
     const cart = localStorage.getItem("cart");
+    console.log(localStorage.getItem("cart"));
     return cart ? JSON.parse(cart) : defaultState;
   }
   return defaultState;

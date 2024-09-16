@@ -9,13 +9,13 @@ const ProductCard = ({ product }) => {
 
   return (
     <Link href={`/products/${product.id}`} passHref>
-      <div className="border p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+      <div className="bg-white border p-4 shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer">
         <img
           src={product.image}
           alt={limitedTitle}
-          className="w-full h-40 object-contain mb-4"
+          className="w-full h-60 object-contain mb-4"
         />
-        <h2 className="text-gray-700 text-md font-semibold mb-2">
+        <h2 className="text-gray-500 text-sm font-normal uppercase mb-2">
           {limitedTitle}
         </h2>
         <p className="text-gray-700 mb-2">${product.price}</p>

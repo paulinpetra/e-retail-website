@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-gray-100">
         <ReduxProviders>
           <AllProductsFetcher /> {/* fetch all products on project mount */}
           <NavBar />

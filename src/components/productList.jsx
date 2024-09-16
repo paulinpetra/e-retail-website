@@ -27,8 +27,11 @@ const ProductList = () => {
   }
 
   return (
-    <div className="bg-white py-12 px-4 sm:px-8 lg:px-16">
+    <div className="py-12 px-4 sm:px-8 lg:px-16">
       {/* Grid container for product cards */}
+      <h2 className="text-gray-500 text-lg font-normal tracking-widest uppercase mb-4">
+        New In
+      </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Mapping over products and rendering a ProductCard for each */}
