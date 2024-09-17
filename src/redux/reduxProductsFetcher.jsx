@@ -1,3 +1,4 @@
+//the only purpose of this component is to trigger the fetchProducts action when needed.
 "use client";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -10,7 +11,7 @@ const AllProductsFetcher = () => {
     dispatch(fetchProducts()); // Fetch all products on mount
   }, [dispatch]);
 
-  return null; // This component does not render anything
+  return null;
 };
 
 export default AllProductsFetcher;

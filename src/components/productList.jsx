@@ -15,7 +15,7 @@ const ProductList = () => {
   }, [dispatch]);
 
   const handleAddToCart = (product) => {
-    dispatch(addItem({ id: product.id, quantity: 1 }));
+    dispatch(addItem({ id: product.id, amount: 1 }));
   };
 
   if (status === "loading") {

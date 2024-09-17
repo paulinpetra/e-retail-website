@@ -1,7 +1,5 @@
-//Redux actions to make fetch calls to my Next.js API routes.
-// This way, I can centralize my data fetching logic within Redux while still leveraging the server-side capabilities of Next.js.
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { productsFetch } from "@/app/api/productsFetch";
+import { productsFetch } from "@/utils/productsFetch";
 
 // Async thunk for fetching products
 export const fetchProducts = createAsyncThunk(

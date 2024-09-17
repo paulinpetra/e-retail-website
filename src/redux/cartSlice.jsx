@@ -4,13 +4,18 @@ import { createSlice } from "@reduxjs/toolkit";
 const defaultState = {
   cartItems: [],
   numItemsInCart: 0,
-  cartTotal: 0,
-  amount: 0,
+  cartTotal: 0, // Total cost of the items in the cart
+  amount: 0, //quantity of a specific item
+
   price: 0,
   imgAlt: "",
   imgSrc: "",
-  orderTotal: 0,
+  orderTotal: 0, //Total order value (can include taxes, shipping, etc. in the future)
 };
+
+// Function to retrieve the cart from localStorage if it exists
+// This function checks if the window object is defined (to avoid server-side errors)
+// and retrieves the cart data, or returns the default state if no cart is found
 
 const getCartFromLocalStorage = () => {
   if (typeof window !== "undefined") {
@@ -18,7 +23,7 @@ const getCartFromLocalStorage = () => {
     console.log(localStorage.getItem("cart"));
     return cart ? JSON.parse(cart) : defaultState;
   }
-  return defaultState;
+  return defaultState; //// If not in the browser (e.g., server-side), return the default state
 };
 
 const cartSlice = createSlice({
@@ -26,8 +31,11 @@ const cartSlice = createSlice({
   initialState: getCartFromLocalStorage(),
   reducers: {
     addItem: (state, action) => {
-      const newCartItem = action.payload;
+      const newCartItem = action.payload; //The new item to add is passed in the action payload
+      // First check if the item is already in the cart
       const item = state.cartItems.find((i) => i.cartID === newCartItem.cartID);
+
+      // If the item already exists, increase the amount
       if (item) {
         item.amount += newCartItem.amount;
       } else {
