@@ -1,3 +1,4 @@
+//The ProductList component passes each product from the Redux store to ProductCard as a prop by map
 "use client";
 import React, { useEffect } from "react";
 import ProductCard from "./productCard";

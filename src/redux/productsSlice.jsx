@@ -1,3 +1,4 @@
+//The productsSlice is responsible for fetching and storing the list of products in the Redux store
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { productsFetch } from "@/utils/productsFetch";
 
@@ -10,7 +11,7 @@ export const fetchProducts = createAsyncThunk(
 const productsSlice = createSlice({
   name: "products",
   initialState: {
-    items: [], //array for multiple products
+    items: [], //array for multiple products from the api (each product has propperties like id, title etc. )
     status: "idle", //Status to track loading state ('idle', 'loading', 'succeeded', 'failed')
     error: null, // Stores any error messages if a request fails
   },
@@ -25,7 +26,7 @@ const productsSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.items = action.payload;
+        state.items = action.payload; //contains the array of product objects, each with an id
         state.status = "succeeded";
       })
       .addCase(fetchProducts.rejected, (state, action) => {

@@ -1,4 +1,6 @@
-// Presentational Component for individual product cards
+//The ProductCard component renders a clickable card for each product,
+//with a Next.js Link that points to a dynamic route like /products/[id].
+//This is where the product id becomes part of the URL.
 import Link from "next/link";
 
 const ProductCard = ({ product }) => {

@@ -1,8 +1,9 @@
+//The cartSlice is responsible for managing the entire shopping cart's state, behavior, and persistence  across page reloads or site visits
 "use client";
 import { createSlice } from "@reduxjs/toolkit";
 
 const defaultState = {
-  cartItems: [],
+  cartItems: [], //store all items added to the cart
   numItemsInCart: 0,
   cartTotal: 0, // Total cost of the items in the cart
   amount: 0, //quantity of a specific item
@@ -10,11 +11,13 @@ const defaultState = {
   price: 0,
   imgAlt: "",
   imgSrc: "",
-  orderTotal: 0, //Total order value (can include taxes, shipping, etc. in the future)
+  orderTotal: 0, //Total order value (can include taxes, shipping, etc. in the future), placeholder if needed later
 };
 
-// Function to retrieve the cart from localStorage if it exists
-// This function checks if the window object is defined (to avoid server-side errors)
+//This function ensures that the cart data is persisted across page reloads
+//by storing and retrieving it from localStorage.
+
+// It checks if the window object is defined (to avoid server-side errors)
 // and retrieves the cart data, or returns the default state if no cart is found
 
 const getCartFromLocalStorage = () => {
@@ -31,7 +34,7 @@ const cartSlice = createSlice({
   initialState: getCartFromLocalStorage(),
   reducers: {
     addItem: (state, action) => {
-      const newCartItem = action.payload; //The new item to add is passed in the action payload
+      const newCartItem = action.payload; // Extract the item from the action payload
       // First check if the item is already in the cart
       const item = state.cartItems.find((i) => i.cartID === newCartItem.cartID);
 
@@ -44,11 +47,14 @@ const cartSlice = createSlice({
       state.numItemsInCart += newCartItem.amount;
       state.cartTotal += newCartItem.price * newCartItem.amount;
 
-      cartSlice.caseReducers.calculateTotals(state);
+      cartSlice.caseReducers.calculateTotals(state); //Recalculate totals (order, tax, etc.).
       if (typeof window !== "undefined") {
-        localStorage.setItem("cart", JSON.stringify(state));
+        localStorage.setItem("cart", JSON.stringify(state)); //updated cart to localStorage
       }
     },
+
+    //can be used to empty the cart completely (e.g., after a successful checkout).
+
     clearCart: (state) => {
       if (typeof window !== "undefined") {
         localStorage.setItem("cart", JSON.stringify(defaultState));
